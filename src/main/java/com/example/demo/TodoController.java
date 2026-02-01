@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController  // it is a combination of two annotation controller and response body
 // it will act as controller point of your project , collecting the request and responding to request
+@RequestMapping("/api/v1/todos")
 public class TodoController {
 
     private static List<Todo> todoList;
@@ -18,16 +19,27 @@ public class TodoController {
         todoList.add(new Todo(1,false, "Todo 1",1));
         todoList.add(new Todo(2,true,"Todo 2",2));
     }
-@GetMapping("/todos")
+@GetMapping
     public ResponseEntity<List<Todo>> getTodos(){
         return ResponseEntity.ok(todoList);
 }
 
-@PostMapping("/todos")
+@PostMapping
 //@ResponseStatus(HttpStatus.CREATED) // at creation of new object it will show status code 201
     public ResponseEntity<Todo> createTodo(@RequestBody Todo newTodo){
         todoList.add(newTodo);
         return ResponseEntity.status(HttpStatus.CREATED).body(newTodo);
+}
+
+@GetMapping("/{todoId}")
+    public ResponseEntity<Todo> getTodoById(@PathVariable Long todoId){
+        for(Todo todo : todoList){
+            if(todo.getId() == todoId ){
+                return ResponseEntity.ok(todo);
+            }
+        }
+        // along with 404, trying to send json file
+        return ResponseEntity.notFound().build();
 }
 
 
