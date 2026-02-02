@@ -3,8 +3,10 @@ package com.example.demo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController  // it is a combination of two annotation controller and response body
@@ -32,15 +34,23 @@ public class TodoController {
 }
 
 @GetMapping("/{todoId}")
-    public ResponseEntity<Todo> getTodoById(@PathVariable Long todoId){
-        for(Todo todo : todoList){
-            if(todo.getId() == todoId ){
-                return ResponseEntity.ok(todo);
-            }
+    public ResponseEntity<?> getTodoById(@PathVariable Long todoId) {
+    for (Todo todo : todoList) {
+        if (Objects.equals(todo.getId(), todoId)) {
+            return ResponseEntity.ok(todo);
         }
+    }
+
+        Map<String, Object> error = new HashMap<>();
+        error.put("messsage", "Todo with Id : " + todoId + " not found");
+        error.put("status", HttpStatus.NOT_FOUND.value());
+
+
         // along with 404, trying to send json file
-        return ResponseEntity.notFound().build();
-}
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+
+    }
+
 
 
 
