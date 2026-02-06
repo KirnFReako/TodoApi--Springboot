@@ -5,11 +5,15 @@ import org.springframework.stereotype.Service;
 
 @Service("FakeTodoService")
 
-public class FakeTodoService implements TodoService{
+public class FakeTodoService implements TodoService {
 
-    public String doSomething(){
+    @TimeMonitor
 
-        return "Something";
+    public String doSomething() {
+
+        for (int i = 0; i < 1000000; i++) {}
+            return "Something";  // join point
+        }
+
     }
 
-}

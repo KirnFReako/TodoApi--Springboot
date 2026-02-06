@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 
 import java.util.ArrayList;
@@ -25,8 +26,10 @@ public class TodoController {
 
     public TodoController(@Qualifier("FakeTodoService") TodoService todoService1,
             @Qualifier("anotherTodoService") TodoService todoService2) {
+
         this.todoService1 = todoService1;
         this.todoService2 = todoService2;
+
         todoList = new ArrayList<>();
         todoList.add(new Todo(1, false, "Todo 1", 1));
         todoList.add(new Todo(2, true, "Todo 2", 2));
@@ -40,6 +43,8 @@ public class TodoController {
         return ResponseEntity.ok(todoList);
     }
 
+
+
     @PostMapping
     // @ResponseStatus(HttpStatus.CREATED) // at creation of new object it will show
     // status code 201
@@ -48,6 +53,7 @@ public class TodoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newTodo);
     }
 
+
     @GetMapping("/{todoId}")
     public ResponseEntity<?> getTodoById(@PathVariable Long todoId) {
         for (Todo todo : todoList) {
@@ -55,6 +61,7 @@ public class TodoController {
                 return ResponseEntity.ok(todo);
             }
         }
+
 
         Map<String, Object> error = new HashMap<>();
         error.put("messsage", "Todo with Id : " + todoId + " not found");
